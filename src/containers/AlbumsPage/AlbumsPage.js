@@ -19,7 +19,7 @@ class AlbumsPage extends Component {
 
         return (
             <Fragment>
-                <h2>Albums</h2>
+                <h2>Albums </h2>
                 <ListGroup className="Artists">
                     {this.props.albums.map(album => (
                         <ListGroupItem className="Item" key={album._id}>

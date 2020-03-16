@@ -1,8 +1,8 @@
 import axios from 'axios';
 import {apiURL} from "./constants";
 
-const AxiosApi = axios.create({
+const axiosApi = axios.create({
   baseURL: apiURL
 });
 
-export default AxiosApi;
+export default axiosApi;

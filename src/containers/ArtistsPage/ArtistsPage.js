@@ -22,7 +22,7 @@ class ArtistsPage extends Component {
                 <h2>All Artists <i>({this.props.artists.length})</i></h2>
                 <ListGroup className="Artists">
                     {this.props.artists.map(artist => (
-                        <ListGroupItem className="Item" key={artist._id} >
+                        <ListGroupItem className="Item" key={artist._id}>
                             <NavLink className="Link" tag={RouterNavLink} to={`/albums?artist_id=${artist._id}`} exact>
                             <ArtistThumbnail image={artist.image} />
                             <span>{artist.name}</span>

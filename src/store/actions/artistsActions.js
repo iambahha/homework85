@@ -11,10 +11,11 @@ export const fetchArtistsFailure = error => ({type: FETCH_ARTISTS_FAILURE, error
 export const fetchArtists = () => {
     return async dispatch => {
         try{
-            const response = await axiosApi.get('artists');
+            dispatch(fetchArtistsRequest());
+            const response = await axiosApi.get('/artists');
             dispatch(fetchArtistsSuccess(response.data));
         } catch(e){
-            dispatch(fetchArtistsFailure(e))
+            dispatch(fetchArtistsFailure(e));
             console.error(e);
         }
     }

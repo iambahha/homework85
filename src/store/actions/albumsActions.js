@@ -11,7 +11,8 @@ export const fetchAlbumsFailure = error => ({type: FETCH_ALBUMS_FAILURE, error})
 export const fetchAlbums = (id) => {
     return async dispatch => {
         try{
-            const response = await axiosApi.get('albums?artist=' + id);
+            dispatch(fetchAlbumsRequest());
+            const response = await axiosApi.get('/albums' + id);
             dispatch(fetchAlbumsSuccess(response.data));
         } catch(e){
             dispatch(fetchAlbumsFailure(e));
