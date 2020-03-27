@@ -1,71 +1,108 @@
 import React, {Component, Fragment} from 'react';
-import {Alert, Button, Col, Form, FormGroup} from "reactstrap";
-import {registerUser} from "../../store/actions/usersActions";
 import {connect} from "react-redux";
-import FormElement from "../../components/Form/FormElement";
+import {Alert, Button, Col, Form, FormGroup} from "reactstrap";
+
+import {registerUser} from "../../store/actions/usersActions";
+import FormElement from "../../components/UI/Form/FormElement";
 
 class Register extends Component {
-    state = {
-        username: '',
-        password: ''
-    };
+  state = {
+    username: '',
+    password: '',
+    displayName: '',
+    avatarImage: '',
+  };
 
-    inputChangeHandler = event => {
-        this.setState({
-           [event.target.name]: event.target.value
-        });
-    };
+  inputChangeHandler = event => {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  };
 
-    submitFormHandler = event => {
-      event.preventDefault();
-      this.props.registerUser({...this.state});
-    };
+  submitFormHandler = event => {
+    event.preventDefault();
 
-    getFieldError = fieldName => {
-        return this.props.error && this.props.error.errors && this.props.error.errors[fieldName] && this.props.error.errors[fieldName].message;
-    };
+    const formData = new FormData();
 
-    render() {
-        return (
-            <Fragment>
-                <h2>Register New User</h2>
-                {this.props.error && this.props.error.global && (
-                    <Alert color="danger">
-                        {this.props.error.global}
-                    </Alert>
-                )}
-                <Form onSubmit={this.submitFormHandler}>
-                   <FormElement
-                       propertyName="username"
-                       title="Username"
-                       type="text"
-                       value={this.state.username}
-                       onChange={this.inputChangeHandler}
-                       error={this.getFieldError('username')}
-                       placeholder="Enter your desired username"
-                       autoComplete="new-username"
-                   />
+    Object.keys(this.state).forEach(key => {
+      formData.append(key, this.state[key]);
+    });
 
-                    <FormElement
-                        propertyName="password"
-                        title="Password"
-                        type="password"
-                        value={this.state.password}
-                        onChange={this.inputChangeHandler}
-                        error={this.getFieldError('password')}
-                        placeholder="Enter new secure password"
-                        autoComplete="new-password"
-                    />
+    this.props.registerUser(formData);
+  };
 
-                    <FormGroup row>
-                        <Col sm={{offset: 2, size: 10}}>
-                            <Button type="submit" color="primary">Register</Button>
-                        </Col>
-                    </FormGroup>
-                </Form>
-            </Fragment>
-        );
-    }
+  fileChangeHandler = event => {
+    this.setState({
+      [event.target.name]: event.target.files[0]
+    })
+  };
+
+  getFieldError = fieldName => {
+    return this.props.error && this.props.error.errors &&
+      this.props.error.errors[fieldName] && this.props.error.errors[fieldName].message;
+  };
+
+  render() {
+    return (
+      <Fragment>
+        <h2>Register new user</h2>
+        {this.props.error && this.props.error.global && (
+          <Alert color="danger">
+            {this.props.error.global}
+          </Alert>
+        )}
+
+        <Form onSubmit={this.submitFormHandler}>
+          <FormElement
+            propertyName="username"
+            title="Username"
+            type="text"
+            value={this.state.username}
+            onChange={this.inputChangeHandler}
+            error={this.getFieldError('username')}
+            placeholder="Enter your desired username"
+            autoComplete="new-username"
+          />
+
+          <FormElement
+            propertyName="password"
+            title="Password"
+            type="password"
+            value={this.state.password}
+            onChange={this.inputChangeHandler}
+            error={this.getFieldError('password')}
+            placeholder="Enter new secure password"
+            autoComplete="new-password"
+          />
+
+          <FormElement
+            propertyName="displayName"
+            title="displayName"
+            type="text"
+            value={this.state.displayName}
+            onChange={this.inputChangeHandler}
+            error={this.getFieldError('displayName')}
+            placeholder="Enter your display name"
+          />
+
+          <FormElement
+            propertyName="avatarImage"
+            title="avatarImage"
+            type="file"
+            onChange={this.fileChangeHandler}
+          />
+
+          <FormGroup row>
+            <Col sm={{offset: 2, size: 10}}>
+              <Button type="submit" color="primary">
+                Register
+              </Button>
+            </Col>
+          </FormGroup>
+        </Form>
+      </Fragment>
+    );
+  }
 }
 
 const mapStateToProps = state => ({
@@ -73,7 +110,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    registerUser: userData => dispatch(registerUser(userData))
+  registerUser: userData => dispatch(registerUser(userData))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Register);

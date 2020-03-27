@@ -1,22 +1,47 @@
 import axiosApi from '../../axios-api';
+import {NotificationManager} from "react-notifications";
 
-export const FETCH_ALBUMS_REQUEST = 'FETCH_ALBUMS_REQUEST';
 export const FETCH_ALBUMS_SUCCESS = 'FETCH_ALBUMS_SUCCESS';
-export const FETCH_ALBUMS_FAILURE = 'FETCH_ALBUMS_FAILURE';
+export const CREATE_ALBUM_SUCCESS = 'CREATE_ALBUM_SUCCESS';
 
-export const fetchAlbumsRequest = () => ({type: FETCH_ALBUMS_REQUEST});
 export const fetchAlbumsSuccess = albums => ({type: FETCH_ALBUMS_SUCCESS, albums});
-export const fetchAlbumsFailure = error => ({type: FETCH_ALBUMS_FAILURE, error});
+export const createAlbumSuccess = () => ({type: CREATE_ALBUM_SUCCESS});
 
-export const fetchAlbums = (id) => {
-    return async dispatch => {
-        try{
-            dispatch(fetchAlbumsRequest());
-            const response = await axiosApi.get('/albums' + id);
-            dispatch(fetchAlbumsSuccess(response.data));
-        } catch(e){
-            dispatch(fetchAlbumsFailure(e));
-            console.error(e);
-        }
-    }
+export const fetchAlbums = () => {
+	return async dispatch => {
+		const response = await axiosApi.get('/albums');
+		dispatch(fetchAlbumsSuccess(response.data))
+	};
 };
+
+export const fetchAlbum = (id) => {
+	return async dispatch => {
+		const response = await axiosApi.get('/albums/' + id);
+		dispatch(fetchAlbumsSuccess(response.data))
+	};
+};
+
+export const createAlbum = albumData => {
+	return async dispatch => {
+		await axiosApi.post('/albums', albumData);
+		dispatch(createAlbumSuccess());
+		NotificationManager.success('You added new album');
+	};
+};
+
+export const publishAlbum = (id, publish, artistId) => {
+	return async dispatch => {
+		await axiosApi.post(`/albums/${id}/toggle_published`, publish);
+		dispatch(fetchAlbum(artistId));
+		NotificationManager.success('You published an album!');
+	};
+};
+
+export const removedAlbum = (id, remove, artistId) => {
+	return async dispatch => {
+		await axiosApi.post(`/albums/${id}/toggle_removed`, remove);
+		dispatch(fetchAlbum(artistId));
+		NotificationManager.success('You removed an album!');
+	};
+};
+
