@@ -4,15 +4,15 @@ import {Container} from "reactstrap";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import {logoutUser} from "./store/actions/usersActions";
-import {NotificationContainer} from "react-notifications";
 import Routes from "./Routes";
+import {ToastContainer} from "react-toastify";
 
 
 class App extends Component {
   render() {
     return (
       <Fragment>
-        <NotificationContainer/>
+        <ToastContainer autoClose={2000} />
         <header>
           <Toolbar
             user={this.props.user}

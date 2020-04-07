@@ -1,6 +1,6 @@
 import axiosApi from '../../axios-api';
 import {push} from 'connected-react-router';
-import {NotificationManager} from "react-notifications";
+import { toast } from 'react-toastify';
 
 export const TRACK_HISTORY_SUCCESS = 'TRACK_HISTORY_SUCCESS';
 
@@ -14,7 +14,7 @@ export const fetchTrackHistory = trackData => {
 		} else {
 			await axiosApi.post('/track_history', trackData, {headers: {'Authorization': user.token}});
 			dispatch(fetchTrackHistorySuccess());
-			NotificationManager.success('You listened to the song!');
+			toast.success('You listened to the song!');
 		}
 	};
 };

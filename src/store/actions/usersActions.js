@@ -1,5 +1,5 @@
 import {push} from 'connected-react-router';
-import {NotificationManager} from 'react-notifications';
+import { toast } from 'react-toastify';
 import axiosApi from '../../axios-api';
 
 export const REGISTER_USER_SUCCESS = 'REGISTER_USER_SUCCESS';
@@ -24,12 +24,22 @@ export const logoutUser = () => {
 
       await axiosApi.delete('/users/sessions', config);
       dispatch({type: LOGOUT_USER});
-      NotificationManager.success('Logged out!');
+      toast.success('Logged out!');
       dispatch(push('/'));
     } catch (e) {
-      NotificationManager.error('Could not logout!');
+      toast.error('Could not logout!');
     }
   }
+};
+
+export const loginWithFacebook = facebookData => {
+  return async dispatch => {
+    const response = await axiosApi.post('/users/facebook', facebookData);
+
+    toast.success('Logged in with Facebook');
+    dispatch(loginUserSuccess(response.data));
+    dispatch(push('/'));
+  };
 };
 
 export const registerUser = userData => {
@@ -37,7 +47,7 @@ export const registerUser = userData => {
     try {
       const response = await axiosApi.post('/users', userData);
       dispatch(registerUserSuccess(response.data.user));
-      NotificationManager.success('Registered successfully!');
+      toast.success('Registered successfully!');
       dispatch(push('/'));
     } catch (e) {
       if (e.response) {
@@ -54,7 +64,7 @@ export const loginUser = userData => {
     try {
       const response = await axiosApi.post('/users/sessions', userData);
       dispatch(loginUserSuccess(response.data.user));
-      NotificationManager.success('Logged in successfully!');
+      toast.success('Logged in successfully!');
       dispatch(push('/'));
     } catch (e) {
       if (e.response) {

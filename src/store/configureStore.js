@@ -8,8 +8,7 @@ import usersReducer from '../store/reducers/usersReducer';
 import trackHistoryReducer from '../store/reducers/trackHistoryReducer';
 
 import thunkMiddleware from "redux-thunk";
-import {loadFromLocalStorage, saveToLocalStorage} from "./localStorage";
-import axiosApi from '../axios-api';
+import {loadFromLocalStorage, localStorageMiddleware} from "./localStorage";
 
 export const history = createBrowserHistory();
 
@@ -26,7 +25,8 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const middleware = [
   thunkMiddleware,
-  routerMiddleware(history)
+  routerMiddleware(history),
+  localStorageMiddleware
 ];
 
 const enhancers = composeEnhancers(applyMiddleware(...middleware));
@@ -34,23 +34,5 @@ const enhancers = composeEnhancers(applyMiddleware(...middleware));
 const persistedState = loadFromLocalStorage();
 
 const store = createStore(rootReducer, persistedState, enhancers);
-
-store.subscribe(() => {
-  saveToLocalStorage({
-    users: {
-      user: store.getState().users.user
-    }
-  });
-});
-
-axiosApi.interceptors.request.use(config => {
-  try {
-    config.headers['Authorization'] = store.getState().users.user.token;
-  } catch (e) {
-    console.log(e)
-  }
-
-  return config;
-});
 
 export default store;

@@ -1,5 +1,5 @@
 import axiosApi from '../../axios-api';
-import {NotificationManager} from "react-notifications";
+import { toast } from 'react-toastify';
 
 export const FETCH_ALBUMS_SUCCESS = 'FETCH_ALBUMS_SUCCESS';
 export const CREATE_ALBUM_SUCCESS = 'CREATE_ALBUM_SUCCESS';
@@ -25,7 +25,7 @@ export const createAlbum = albumData => {
 	return async dispatch => {
 		await axiosApi.post('/albums', albumData);
 		dispatch(createAlbumSuccess());
-		NotificationManager.success('You added new album');
+		toast.success('You added new album');
 	};
 };
 
@@ -33,7 +33,7 @@ export const publishAlbum = (id, publish, artistId) => {
 	return async dispatch => {
 		await axiosApi.post(`/albums/${id}/toggle_published`, publish);
 		dispatch(fetchAlbum(artistId));
-		NotificationManager.success('You published an album!');
+		toast.success('You published an album!');
 	};
 };
 
@@ -41,7 +41,7 @@ export const removedAlbum = (id, remove, artistId) => {
 	return async dispatch => {
 		await axiosApi.post(`/albums/${id}/toggle_removed`, remove);
 		dispatch(fetchAlbum(artistId));
-		NotificationManager.success('You removed an album!');
+		toast.success('You removed an album!');
 	};
 };
 

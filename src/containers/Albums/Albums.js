@@ -11,7 +11,6 @@ class Albums extends Component {
   }
 
   render() {
-    console.log(this.props.albums);
     return (
       <Fragment>
         <h2>{this.props.match.params.artist}</h2>
